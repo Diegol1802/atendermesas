@@ -149,7 +149,8 @@ function formato_fecha($fecha_str) {
     <p class="total">Total: <?= formato_clp($total) ?></p>
 
     <p>Peña del canto popular, Gracias Por Participar</p>
-
+    <p>.</p>
+    <p>.</p>
 
     <button id="btnPrint" onclick="window.print()">Imprimir Ticket</button>
     <button id="btnVolver" onclick="window.location.href='index.php'">Volver</button>

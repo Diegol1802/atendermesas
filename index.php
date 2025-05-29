@@ -157,5 +157,44 @@ $conn->close();
         <p>Total de pedidos pendientes: <strong><?= $totalPendientes ?></strong></p>
         <p>Total de ventas: <strong>$<?= number_format($totalVentas, 0, ',', '.') ?></strong></p>
     </div>
+    
+    <a href="pedircaja.php?mesa=777" style="
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: #4A90E2;
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+" onmouseover="this.style.backgroundColor='#357ABD'; this.style.boxShadow='0 6px 12px rgba(53, 122, 189, 0.5)';"
+onmouseout="this.style.backgroundColor='#4A90E2'; this.style.boxShadow='0 4px 8px rgba(74, 144, 226, 0.3)';"
+>
+  Pedir En Caja
+</a>
+
+    <a href="productos.php" style="
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4A90E2;
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+" onmouseover="this.style.backgroundColor='#357ABD'; this.style.boxShadow='0 6px 12px rgba(53, 122, 189, 0.5)';"
+onmouseout="this.style.backgroundColor='#4A90E2'; this.style.boxShadow='0 4px 8px rgba(74, 144, 226, 0.3)';"
+>
+  Cambiar Disponibilidad de Productos
+</a>
+
+
 </body>
 </html>

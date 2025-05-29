@@ -44,7 +44,7 @@ if (isset($_GET['pedido_id'])) {
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Pedido realizado Mesa <?= htmlspecialchars($mesa) ?></title>
+        <title>Pedido en Caja <?= htmlspecialchars($mesa) ?></title>
         <style>
             body {
                 font-family: 'Segoe UI', sans-serif;
@@ -89,7 +89,7 @@ if (isset($_GET['pedido_id'])) {
         </style>
     </head>
     <body>
-        <h2>Pedido realizado para Mesa <?= htmlspecialchars($mesa) ?></h2>
+        <h2>Pedido en Caja<?= htmlspecialchars($mesa) ?></h2>
         <table>
             <thead>
                 <tr>
@@ -172,7 +172,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $stmtDetalle->close();
 
-    header("Location: ".$_SERVER['PHP_SELF']."?mesa=$mesa&pedido_id=$pedido_id");
+    file_get_contents("https://relamticket.cl/comida/pagadocaja.php?id=$pedido_id");
+
+    header("Location: ticket_pedido.php?id=$pedido_id");
     exit;
 }
 ?>
@@ -182,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pedido Mesa <?= htmlspecialchars($mesa) ?></title>
+    <title>Pedido en Caja <?= htmlspecialchars($mesa) ?></title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -304,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <h2>Pedido para Mesa <?= htmlspecialchars($mesa) ?></h2>
+    <h2>Pedido en Caja <?= htmlspecialchars($mesa) ?></h2>
 
     <div class="pedido-box">
         <div class="input-row">

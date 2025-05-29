@@ -7,7 +7,8 @@ if ($pedido_id <= 0) {
 }
 
 // Obtener productos para selección
-$productos = $conn->query("SELECT * FROM productos ORDER BY categoria, nombre")->fetch_all(MYSQLI_ASSOC);
+$productos = $conn->query("SELECT * FROM productos WHERE disponible = 1 ORDER BY categoria, nombre")->fetch_all(MYSQLI_ASSOC);
+
 
 // Procesar formulario al enviar
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
