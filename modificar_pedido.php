@@ -39,8 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $stmtDetalle->close();
 
+    // Llamada externa a la URL antes de redirigir
+    file_get_contents("https://relamticket.cl/comida/pagadocaja.php?id=$pedido_id");
+
     // Redirigir después de guardar
-    header("Location: https://relamticket.cl/comida/pedido.php?id=$pedido_id");
+    header("Location: ticket_pedido.php?id=$pedido_id");
     exit;
 }
 

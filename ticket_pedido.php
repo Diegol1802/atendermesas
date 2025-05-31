@@ -42,96 +42,147 @@ function formato_fecha($fecha_str) {
     <title>Ticket Pedido #<?= $id ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
+        @page {
+            size: 80mm auto;
+            margin: 0;
+        }
         body {
             font-family: monospace;
-            max-width: 58mm;
+            max-width: 80mm;
             margin: auto;
             padding: 10px;
             color: #000;
             background: #fff;
-            font-weight: bold; /* Todo en negrita */
+            font-weight: bold;
         }
-        h2, p {
+        .info-header {
             text-align: center;
-            margin: 5px 0;
-            font-size: 20px
-            
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        .info-header p {
+            margin: 6px 0;
+            font-weight: bold;
         }
         table {
-            width: 120%;
+            width: 100%;
             border-collapse: collapse;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: bold;
+            border-top: 3px solid #000; /* línea gruesa arriba tabla */
+        }
+        thead tr {
+            border-bottom: 3px solid #000; /* línea gruesa debajo de la cabecera */
+        }
+        tbody tr:not(:last-child) {
+            border-bottom: 3px solid #000; /* línea gruesa entre filas */
         }
         th, td {
             padding: 3px 5px;
             text-align: center;
-            border-bottom: 1px dashed #aaa;
+        }
+        /* Evitar salto de línea en precios */
+        th.price, td.price {
+            min-width: 70px;
+            text-align: right;
+            white-space: nowrap;
+        }
+        .linea-total {
+            border-top: 3px solid #000; /* línea gruesa */
+            margin: 15px 0 10px 0;
+            width: 105%;
         }
         .price {
             text-align: right;
         }
         .total {
-            border-top: 1px dashed #000;
-            margin-top: 8px;
-            padding-top: 5px;
+            position: relative;
+            right: -10px;
             text-align: right;
-            font-size: 17px;
+            font-size: 18px;
+            margin: 0;
+            padding: 10;
         }
-        #btnPrint {
-            display: block;
-            width: 100%;
-            margin: 15px 0;
-            padding: 8px;
-            font-size: 14px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
+        /* Contenedor de botones centrado y fijo abajo */
+        #botones {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px; /* espacio entre botones */
+            z-index: 1000;
+        }
+        /* Botones grandes */
+        #btnPrint, #btnVolver {
+            width: 200px;
+            height: 60px;
+            font-size: 24px;
+            border-radius: 10px;
             cursor: pointer;
             user-select: none;
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+        #btnPrint {
+            background-color: #007bff;
         }
         #btnPrint:hover {
             background-color: #0056b3;
         }
-        /* El botÃ³n "Volver" visible en pantalla */
         #btnVolver {
-            display: block;
-            width: 100%;
-            padding: 8px;
-            font-size: 14px;
             background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
         }
-        /* Al imprimir ocultamos ambos botones */
+        #btnVolver:hover {
+            background-color: #1e7e34;
+        }
         @media print {
-            #btnPrint, #btnVolver {
+            #botones {
                 display: none;
             }
             body {
-                max-width: 58mm;
+                max-width: 80mm;
                 margin: 0;
                 padding: 0;
             }
         }
+
+        /* Div para simular avance de papel (feed) al imprimir */
+        .feed-space {
+            height: 40mm;
+            background: transparent;
+            display: block;
+            position: relative;
+        }
+        .feed-space::after {
+            content: "\00a0"; /* espacio no rompible */
+            display: block;
+            height: 40mm; /* feed adicional */
+            visibility: hidden;
+        }
     </style>
 </head>
 <body>
-    <h2>Mesa: <?= htmlspecialchars($pedido['mesa']) ?></h2> 
-    <p>Pedido #<?= $id ?></p>
-    <p>Fecha: <?= formato_fecha($pedido['fecha']) ?></p>
-    <p>Estado: <strong><?= $pedido['pagado'] ? 'Pagado' : 'Pendiente' ?></strong></p>
+
+    <div id="botones">
+        <button id="btnVolver" onclick="window.location.href='index.php'">Volver</button>
+        <button id="btnPrint" onclick="window.print()">Imprimir Ticket</button>
+    </div>
+
+    <div class="info-header">
+        <p>Mesa: <?= htmlspecialchars($pedido['mesa']) ?></p>
+        <p>Pedido #<?= $id ?></p>
+        <p>Fecha: <?= formato_fecha($pedido['fecha']) ?></p>
+        <p>Estado: <?= $pedido['pagado'] ? 'Pagado' : 'Pendiente' ?></p>
+    </div>
 
     <table>
         <thead>
             <tr>
                 <th>Producto</th>
                 <th>Cant.</th>
-                <th class="price">Precio.</th>
+                <th class="price">Precio</th>
                 <th class="price">Subtotal</th>
             </tr>
         </thead>
@@ -146,14 +197,25 @@ function formato_fecha($fecha_str) {
             <?php endwhile; ?>
         </tbody>
     </table>
+
+    <div class="linea-total"></div>
+
     <p class="total">Total: <?= formato_clp($total) ?></p>
 
-    <p>PeÃ±a del canto popular, Gracias Por Participar</p>
-    <p>.</p>
-    <p>.</p>
+    <p style="text-align: center; font-size: 22px; margin-top: 20px;">
+        PeÃ±a del canto popular, Gracias Por Participar.
+    </p>
 
-    <button id="btnPrint" onclick="window.print()">Imprimir Ticket</button>
-    <button id="btnVolver" onclick="window.location.href='index.php'">Volver</button>
+    <div class="feed-space"></div>
+
+    <p style="
+        font-size: 10px;
+        text-align: center;
+        opacity: 1;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+    ">.</p>
 
 </body>
 </html>
