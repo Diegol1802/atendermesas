@@ -135,13 +135,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $fechaChile = new DateTime('now', new DateTimeZone('America/Santiago'));
+    $cliente = isset($_POST['cliente']) ? trim($_POST['cliente']) : '';
     $fechaPedido = $fechaChile->format('Y-m-d H:i:s');
 
-    $stmtPedido = $conn->prepare("INSERT INTO pedidos (mesa, fecha) VALUES (?, ?)");
+    $stmtPedido = $conn->prepare("INSERT INTO pedidos (mesa, cliente, fecha) VALUES (?, ?, ?)");
     if (!$stmtPedido) {
         die("Error preparando pedido: " . $conn->error);
     }
-    $stmtPedido->bind_param("is", $mesa, $fechaPedido);
+    $stmtPedido->bind_param("iss", $mesa, $cliente, $fechaPedido);
     if (!$stmtPedido->execute()) {
         die("Error ejecutando pedido: " . $stmtPedido->error);
     }
@@ -325,6 +326,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <form method="POST" id="pedido-form" onsubmit="prepararEnvio()">
+                          <div class="pedido-box">
+        <div class="input-row">
+    <input type="text" name="cliente" id="cliente" placeholder="Nombre del cliente" 
+           style="flex: 1; padding: 14px 16px; font-size: 20px; border: 1px solid #ccc; border-radius: 8px;" />
+         </div>
+
             <table id="productos-table" aria-label="Productos agregados">
                 <thead>
                     <tr>
@@ -501,6 +508,7 @@ function prepararEnvio() {
     while (pedidoForm.querySelector('input[name="cantidad[]"]')) {
         pedidoForm.querySelector('input[name="cantidad[]"]').remove();
     }
+    pedidoForm.querySelectorAll('input[name="cliente[]"]').forEach(input => input.remove());
 
     // Agregar inputs hidden para enviar datos
     productosAgregados.forEach(item => {

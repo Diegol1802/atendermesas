@@ -195,6 +195,27 @@ onmouseout="this.style.backgroundColor='#4A90E2'; this.style.boxShadow='0 4px 8p
   Cambiar Disponibilidad de Productos
 </a>
 
+</a>
+
+    <a href="resumendeventas.php" style="
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4A90E2;
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  margin-top: 10px;
+" onmouseover="this.style.backgroundColor='#357ABD'; this.style.boxShadow='0 6px 12px rgba(53, 122, 189, 0.5)';"
+onmouseout="this.style.backgroundColor='#4A90E2'; this.style.boxShadow='0 4px 8px rgba(74, 144, 226, 0.3)';"
+>
+  Resumen de Ventas por Productos
+</a>
+
 
 </body>
 </html>

@@ -1,0 +1,16 @@
+AuthType Basic
+AuthName "Zona segura"
+AuthUserFile /home/c2830289/public_html/comida/.htpasswd
+
+<FilesMatch "^(index|pedir|pedircaja)\.php$">
+    Require valid-user
+</FilesMatch>
+
+<FilesMatch "^(?!index|pedir|pedircaja).*\.php$">
+    Require all granted
+</FilesMatch>
+
+# Opcional: forzar autenticación si se accede directamente a la carpeta (sin archivo)
+<If "%{REQUEST_URI} == '/comida/' || %{REQUEST_URI} == '/comida'">
+    Require valid-user
+</If>

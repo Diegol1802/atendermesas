@@ -44,7 +44,7 @@ if (isset($_GET['pedido_id'])) {
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Pedido en Caja <?= htmlspecialchars($mesa) ?></title>
+        <title>Pedido realizado Mesa <?= htmlspecialchars($mesa) ?></title>
         <style>
             body {
                 font-family: 'Segoe UI', sans-serif;
@@ -89,7 +89,7 @@ if (isset($_GET['pedido_id'])) {
         </style>
     </head>
     <body>
-        <h2>Pedido en Caja<?= htmlspecialchars($mesa) ?></h2>
+        <h2>Pedido realizado para Mesa <?= htmlspecialchars($mesa) ?></h2>
         <table>
             <thead>
                 <tr>
@@ -135,14 +135,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $fechaChile = new DateTime('now', new DateTimeZone('America/Santiago'));
-    $cliente = isset($_POST['cliente']) ? trim($_POST['cliente']) : '';
     $fechaPedido = $fechaChile->format('Y-m-d H:i:s');
 
-    $stmtPedido = $conn->prepare("INSERT INTO pedidos (mesa, cliente, fecha) VALUES (?, ?, ?)");
+    $stmtPedido = $conn->prepare("INSERT INTO pedidos (mesa, fecha) VALUES (?, ?)");
     if (!$stmtPedido) {
         die("Error preparando pedido: " . $conn->error);
     }
-    $stmtPedido->bind_param("iss", $mesa, $cliente, $fechaPedido);
+    $stmtPedido->bind_param("is", $mesa, $fechaPedido);
     if (!$stmtPedido->execute()) {
         die("Error ejecutando pedido: " . $stmtPedido->error);
     }
@@ -173,9 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $stmtDetalle->close();
 
-    file_get_contents("https://relamticket.cl/comida/pagadocaja.php?id=$pedido_id");
-
-    header("Location: ticket_pedido.php?id=$pedido_id");
+    header("Location: ".$_SERVER['PHP_SELF']."?mesa=$mesa&pedido_id=$pedido_id");
     exit;
 }
 ?>
@@ -185,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pedido en Caja <?= htmlspecialchars($mesa) ?></title>
+    <title>Pedido Mesa <?= htmlspecialchars($mesa) ?></title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -307,9 +304,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <h2>Pedido en Caja <?= htmlspecialchars($mesa) ?></h2>
+    <h2>Pedido para Mesa <?= htmlspecialchars($mesa) ?></h2>
 
-
+    <div class="pedido-box">
         <div class="input-row">
             <select id="categoria-select" class="categoria-select" required>
                 <option value="">Seleccione categoria</option>
@@ -328,12 +325,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <form method="POST" id="pedido-form" onsubmit="prepararEnvio()">
-              <div class="pedido-box">
-        <div class="input-row">
-    <input type="text" name="cliente" id="cliente" placeholder="Nombre del cliente" required 
-           style="flex: 1; padding: 14px 16px; font-size: 20px; border: 1px solid #ccc; border-radius: 8px;" />
-         </div>
-
             <table id="productos-table" aria-label="Productos agregados">
                 <thead>
                     <tr>

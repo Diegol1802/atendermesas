@@ -176,7 +176,11 @@ function formato_fecha($fecha_str) {
         <p>Fecha: <?= formato_fecha($pedido['fecha']) ?></p>
         <p>Estado: <?= $pedido['pagado'] ? 'Pagado' : 'Pendiente' ?></p>
     </div>
-
+<?php if (!empty($pedido['cliente'])): ?>
+    <p style="text-align: center; font-size: 18px; margin-top: 10px;">
+        Cliente: <?= htmlspecialchars($pedido['cliente']) ?>
+    </p>
+<?php endif; ?>
     <table>
         <thead>
             <tr>
@@ -205,7 +209,7 @@ function formato_fecha($fecha_str) {
     <p style="text-align: center; font-size: 22px; margin-top: 20px;">
         Peña del canto popular, Gracias Por Participar.
     </p>
-
+    
     <div class="feed-space"></div>
 
     <p style="

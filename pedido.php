@@ -151,6 +151,7 @@ function formato_clp($valor) {
         <div id="contenido-ticket">
             <h2>Pedido #<?= $id ?> (Mesa <?= htmlspecialchars($pedido['mesa']) ?>)</h2>
             <p><strong>Fecha:</strong> <?= htmlspecialchars($pedido['fecha']) ?></p>
+            <p><strong>Cliente:</strong> <?= htmlspecialchars($pedido['cliente']) ?></p>
             <p class="estado-pago">
                 Estado: 
                 <?php if ($pedido['pagado']): ?>
@@ -196,8 +197,11 @@ function formato_clp($valor) {
             </button>
             <button class="boton" onclick="modificarPedido()">Modificar Pedido</button>
             <button class="boton eliminar" onclick="eliminarPedido()">Eliminar Pedido</button>
+            <a href="editar_cliente.php?id=<?= $id ?>" target="_blank" class="boton">Editar Nombre Cliente</a>
             <button class="boton" onclick="window.print()">Imprimir</button>
             <a href="ticket_pedido.php?id=<?= $id ?>" target="_blank" class="boton">Imprimir Formato Ticket</a>
+
+
 
             <a href="index.php" class="boton">Volver</a>
         </div>
